@@ -1,0 +1,126 @@
+shelve 模块
+shelve模块是一个简单的k，v将内存数据通过文件持久化的模块，可以持久化任何pickle可支持的python数据格式
+#!/usr/bin/env python
+
+import shelve
+
+d = shelve.open('shelve_test') #打开一个文件
+
+
+class Test(object):
+    def __init__(self,n):
+        self.n = n
+
+
+t = Test(123)
+t2 = Test(123334)
+
+name = ["alex","rain","test"]
+d["test"] = name #持久化列表
+d["t1"] = t      #持久化类
+d["t2"] = t2
+
+
+xml 模块
+<configuration>
+
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/data/tmp/hadoop/tmp</value>
+  </property>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://0.0.0.0:9000</value>
+  </property>
+
+</configuration>
+—————————————————————————————————————————
+In [3]: from xml.etree.ElementTree import parse
+
+In [4]: f = open('core-site.xml')
+
+In [5]: et = parse(f)
+
+In [8]: root = et.getroot()
+
+In [9]: root
+Out[9]: <Element 'configuration' at 0x7f95ff1c4c90>
+
+In [10]: root.tag
+Out[10]: 'configuration'
+
+In [11]: root.attrib 				#root的属性
+Out[11]: {}
+
+In [13]: root.text.strip()			#text是标签中的值，可以去掉空字符串
+Out[13]: ''
+
+In [14]: for child in root:
+   ....:     print child.tag
+   ....:     
+property
+property
+_______________________________
+root.find
+root.findall
+root.iterfind
+#这些只能查子元素，不能查孙子元素
+
+In [15]: root.findall('property')
+Out[15]: 
+[<Element 'property' at 0x7f95ff1c4cd0>,
+ <Element 'property' at 0x7f95ff1c4dd0>]
+
+In [16]: root.iterfind('property')
+Out[16]: <generator object select at 0x7f95ff1be550>
+
+In [18]: for e in root.iterfind('property'): print e.tag
+property
+property
+
+—————————————————————————————————————————
+
+In [22]: list(root.iter('name'))
+Out[22]: [<Element 'name' at 0x7f95ff1c4d10>, <Element 'name' at 0x7f95ff1c4e10>]
+
+In [24]: root.findall('property/*')		#匹配property下的所有子节点
+Out[24]: 
+[<Element 'name' at 0x7f95ff1c4d10>,
+ <Element 'value' at 0x7f95ff1c4d50>,
+ <Element 'name' at 0x7f95ff1c4e10>,
+ <Element 'value' at 0x7f95ff1c4e50>]
+
+In [25]: root.findall('.//name')			#可以找到所有子元素
+Out[25]: [<Element 'name' at 0x7f95ff1c4d10>, <Element 'name' at 0x7f95ff1c4e10>]
+
+In [26]: root.findall('.//name/..')		#找到父元素
+Out[26]: 
+[<Element 'property' at 0x7f95ff1c4cd0>,
+ <Element 'property' at 0x7f95ff1c4dd0>]
+
+root.findall('元素标签[@属性名]')
+
+root.findall('元素标签[@属性名="特定值"]')
+
+In [38]: root.findall('property[name]')      #有name这个子元素的标签
+Out[38]: 
+[<Element 'property' at 0x7f95ff1c4cd0>,
+ <Element 'property' at 0x7f95ff1c4dd0>]
+
+In [39]: root.findall('property[name="fs.defaultFS"]')
+#有name这个子元素并且等于特定的值的标签
+Out[39]: [<Element 'property' at 0x7f95ff1c4dd0>]
+
+In [41]: root.findall('property[1]')		#第一个
+Out[41]: [<Element 'property' at 0x7f95ff1c4cd0>]
+
+In [42]: root.findall('property[2]')		#第二个
+Out[42]: [<Element 'property' at 0x7f95ff1c4dd0>]
+
+In [43]: root.findall('property[last()]')	#倒数第一个
+Out[43]: [<Element 'property' at 0x7f95ff1c4dd0>]
+
+In [44]: root.findall('property[last()-1]')	#倒数第二个
+Out[44]: [<Element 'property' at 0x7f95ff1c4cd0>]
+
+

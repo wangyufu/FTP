@@ -1,0 +1,16 @@
+启动：
+	cd /apps/mongodb/bin
+	numactl --interleave=all mongod -config /apps/mongodb/bin/mongodb.conf
+
+用户密码：
+	用户：root
+	密码：strongs
+	
+运行：
+	mongo
+	> use admin
+	> db.auth('root','strong')
+	
+	或
+	
+	mongo admin -u root -p strong
